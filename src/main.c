@@ -3,7 +3,7 @@
  * Filename: main.c
  * Author: Louise <louise>
  * Created: Sun Sep  8 13:53:49 2019 (+0200)
- * Last-Updated: Sun Sep  8 21:47:28 2019 (+0200)
+ * Last-Updated: Sun Sep  8 22:53:37 2019 (+0200)
  *           By: Louise <louise>
  */
 #define MAIN_FILE
@@ -67,6 +67,7 @@ void press() {
 
 int main(int argc, char **argv) {
     InitWindow(480, 340, "Chess");
+    SetTargetFPS(60);
     load_texture();
     init_board();
 
