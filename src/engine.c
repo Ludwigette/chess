@@ -3,7 +3,7 @@
  * Filename: engine.c
  * Author: Louise <louise>
  * Created: Sun Sep  8 18:05:46 2019 (+0200)
- * Last-Updated: Sun Sep  8 19:53:04 2019 (+0200)
+ * Last-Updated: Sun Sep  8 21:59:31 2019 (+0200)
  *           By: Louise <louise>
  */
 #include<stdlib.h>
@@ -48,6 +48,14 @@
     ROOK_MOVE_PART2(1)	\
     ROOK_MOVE_PART2(-1)
 
+#define PAWN_CAPTURE(j, k)						\
+    if (IN_BOARD(x + k, y + j) && GET_PIECE(x + k, y + j) != NOTHING && GET_COLOR(x + k, y + j) != current_c) result = set_bit(result, n_from_pos(x + k, y + j));
+
+#define PAWN_MOVE(start, j)			\
+    if (IN_BOARD(x, y + j)) result = set_bit(result, n_from_pos(x, y + j));	\
+    if (y == start) result = set_bit(result, n_from_pos(x, y + j * 2)); \
+    PAWN_CAPTURE(j, 1); PAWN_CAPTURE(j, -1);
+
 static inline uint64_t set_bit(uint64_t bitfield, int n) {
     return bitfield | (uint64_t)1 << n;
 }
@@ -64,14 +72,8 @@ uint64_t get_possible_moves(int i) {
     switch (game.board[i].piece) {
     case PAWN:
 	switch (game.board[i].color) {
-	case CH_WHITE:
-	    if (y != 0) result = set_bit(result, n_from_pos(x, y - 1));
-	    if (y == 6) result = set_bit(result, n_from_pos(x, y - 2));
-	    break;
-	case CH_BLACK:
-	    if (y != 7) result = set_bit(result, n_from_pos(x, y + 1));
-	    if (y == 1) result = set_bit(result, n_from_pos(x, y + 2));
-	    break;
+	case CH_WHITE: PAWN_MOVE(6, -1); break;
+	case CH_BLACK: PAWN_MOVE(1, 1); break;
 	}
 	break;
     case ROOK:

@@ -3,7 +3,7 @@
  * Filename: ui.c
  * Author: Louise <louise>
  * Created: Sun Sep  8 16:26:28 2019 (+0200)
- * Last-Updated: Sun Sep  8 18:55:22 2019 (+0200)
+ * Last-Updated: Sun Sep  8 21:48:37 2019 (+0200)
  *           By: Louise <louise>
  */
 #include<stdio.h>
@@ -28,8 +28,11 @@ void load_texture() {
 
 void draw_board() {
     ClearBackground(BEIGE);
-    DrawRectangleLines(88, 8, 304, 304, BLACK);
 
+    for (int i = 1; i < 64; i += (i % 8 == 7) ? 1 : (i % 8 == 6) ? 3 : 2)
+	DrawRectangle((i % 8) * 38 + 88, (i / 8) * 38 + 8, 38, 38, BROWN);
+    
+    DrawRectangleLines(88, 8, 304, 304, BLACK);
     for (int i = 126; i < 394; i += 38) {
 	DrawLine(i, 8, i, 312, BLACK);
     }
@@ -55,7 +58,9 @@ void draw_board() {
     DrawText("3", 395, 217 - FONT_SIZE / 2, FONT_SIZE, BLACK);
     DrawText("2", 395, 255 - FONT_SIZE / 2, FONT_SIZE, BLACK);
     DrawText("1", 397, 293 - FONT_SIZE / 2, FONT_SIZE, BLACK);
+}
 
+void draw_pieces() {
     for (int i = 0; i < 64; i++) {
 	int x = (i % 8) * 38 + 89, y = (i / 8) * 38 + 9;
 	switch (game.board[i].piece) {
@@ -73,12 +78,12 @@ void draw_board() {
 void draw_misc() {
     // Highlight
     if (game.highlighted != -1)
-	DrawRectangle((game.highlighted % 8) * 38 + 88, (game.highlighted / 8) * 38 + 8, 38, 38, GREEN);
+	DrawRectangle((game.highlighted % 8) * 38 + 88, (game.highlighted / 8) * 38 + 8, 37, 37, GREEN);
 
     // Possible
     for (int i = 0; i < 64; i++) {
 	if (game.possible & ((uint64_t)1 << i)) {
-	    DrawRectangle((i % 8) * 38 + 88, (i / 8) * 38 + 8, 38, 38, BLUE);
+	    DrawRectangle((i % 8) * 38 + 88, (i / 8) * 38 + 8, 37, 37, BLUE);
 	}
     }
 }
